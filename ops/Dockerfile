@@ -83,15 +83,10 @@ RUN  if command -v curl; \
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
       build-essential \
-      libssl-dev \
-      wget \
       ca-certificates \
       git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN wget -O /tmp/cmake-3.27.7.tar.gz https://cmake.org/files/v3.27/cmake-3.27.7.tar.gz && (cd /tmp && tar xzf cmake-3.27.7.tar.gz) && cd /tmp/cmake-3.27.7 && ./bootstrap && make && make install && cmake --version && rm -rf /tmp/cmake-3.27.7 && rm -rf /tmp/cmake-3.27.7.tar.gz
-
     
 # Stage immediately before building; useful for build iteration
 FROM base as build-prep
@@ -149,6 +144,10 @@ ENV TRITON_FIL_USE_TREELITE_STATIC=$TRITON_FIL_USE_TREELITE_STATIC
 COPY --from=conda-dev /conda/dev /conda/dev
 
 SHELL ["/bin/bash", "-c"]
+
+RUN source /conda/dev/bin/activate \
+    && conda search cmake \
+    && conda install --no-install-recommends -y --allow-downgrade cmake=3.27.7
 
 RUN source /conda/dev/bin/activate \
  && cmake \
