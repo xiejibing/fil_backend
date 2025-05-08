@@ -83,18 +83,15 @@ RUN  if command -v curl; \
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
       build-essential \
+      libssl-dev \
+      wget \
       ca-certificates \
       git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt update -q=2 && \
-    apt install -y gpg wget && \
-    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - |  tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
-    . /etc/os-release \
-    echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $UBUNTU_CODENAME main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
-    apt-get update -q=2 && \
-    apt-get install -y --allow-downgrades --no-install-recommends cmake=3.27.7 cmake-data=3.27.7
+RUN wget -O /tmp/cmake-3.27.7.tar.gz https://cmake.org/files/v3.27/cmake-3.27.7.tar.gz && (cd /tmp && tar xzf cmake-3.27.7.tar.gz) && cd /tmp/cmake-3.27.7 && ./bootstrap && make && make install && cmake --version && rm -rf /tmp/cmake-3.27.7 && rm -rf /tmp/cmake-3.27.7.tar.gz
+
     
 # Stage immediately before building; useful for build iteration
 FROM base as build-prep
