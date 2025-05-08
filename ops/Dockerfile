@@ -146,10 +146,7 @@ COPY --from=conda-dev /conda/dev /conda/dev
 SHELL ["/bin/bash", "-c"]
 
 RUN source /conda/dev/bin/activate \
-    && conda search cmake \
-    && conda install --no-install-recommends -y --allow-downgrade cmake=3.27.7
-
-RUN source /conda/dev/bin/activate \
+ && apt-get install --no-install-recommends -y --allow-downgrade cmake=3.27.7 \
  && cmake \
       --log-level=VERBOSE \
       -GNinja \
