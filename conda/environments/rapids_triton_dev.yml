@@ -7,3 +7,7 @@ dependencies:
   - cmake>=3.26.4,!=3.30.0,<4.0.0
   - ninja
   - rapidjson
+  - python
+  # TODO(hcho3): Remove the pin when
+  # https://github.com/triton-inference-server/common/pull/114 is merged
+  - rapidjson>=1.1.0,<1.1.0.post*
