@@ -17,7 +17,7 @@ ARG SDK_IMAGE=nvcr.io/nvidia/tritonserver:${TRITON_VERSION}-py3-sdk
 # Whether or not to use backend library prebuilt on host
 ARG USE_HOST_LIB=0
 
-FROM condaforge/mambaforge as conda-base
+FROM condaforge/miniforge3:23.3.1-1 as conda-base
 COPY ./ops/gpuci_conda_retry /usr/bin/gpuci_conda_retry
 COPY ./ops/gpuci_mamba_retry /usr/bin/gpuci_mamba_retry
 RUN chmod +x /usr/bin/gpuci_conda_retry /usr/bin/gpuci_mamba_retry
